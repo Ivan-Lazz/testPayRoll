@@ -1,0 +1,52 @@
+# Enable rewriting engine
+RewriteEngine On
+RewriteBase /
+
+# Deny access to files starting with a dot
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Deny access to config files
+<FilesMatch "^config\.php$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Protect against XSS, clickjacking and other vulnerabilities
+<IfModule mod_headers.c>
+    # Security headers
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
+</IfModule>
+
+# Redirect all requests to index.php except for existing files/directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Set default character set
+AddDefaultCharset UTF-8
+
+# Disable directory listing
+Options -Indexes
+
+# Prevent access to specific file types
+<FilesMatch "\.(ini|log|sh|sql|json)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# PHP settings
+php_flag display_errors off
+php_flag log_errors on
+php_value error_log "error_log.txt"
+php_value max_execution_time 30
+php_value max_input_time 60
+php_value memory_limit 128M
+php_value post_max_size 8M
+php_value upload_max_filesize 2M

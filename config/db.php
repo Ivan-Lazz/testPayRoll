@@ -3,9 +3,9 @@ require_once 'config.php';
 
 class Database {
     private $host = "localhost";
-    private $db_name = "bm_payroll";
-    private $username = "root";
-    private $password = "";
+    private $db_name = "bm_payroll"; // Ensure this database exists in your MySQL server
+    private $username = "root";      // Default XAMPP username
+    private $password = "";          // Default XAMPP password (blank)
     private $conn;
     private $options;
 
@@ -27,11 +27,16 @@ class Database {
                 $this->password,
                 $this->options
             );
+            
+            // For debugging purposes
+            error_log("Database connection established successfully!");
+            
+            return $this->conn;
         } catch(PDOException $e) {
             $this->logError($e);
+            error_log("Database connection failed: " . $e->getMessage());
             throw new Exception("Database connection failed: " . $e->getMessage());
         }
-        return $this->conn;
     }
 
     /**

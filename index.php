@@ -15,7 +15,8 @@ require_once __DIR__ . '/middleware/AuthMiddleware.php';
 require_once __DIR__ . '/middleware/CSRFMiddleware.php';
 
 // Set headers for CORS and security
-header("Access-Control-Allow-Origin: *");  // In production, set this to specific origin
+// Set headers for CORS and security
+  // Use specific origin in production
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, X-CSRF-Token");

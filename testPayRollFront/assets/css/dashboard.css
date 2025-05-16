@@ -1,0 +1,267 @@
+/* dashboard.css - Dashboard styles */
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-title {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-subtitle {
+  color: var(--text-light);
+  font-weight: normal;
+}
+
+.dashboard-stats {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 200px;
+  background-color: white;
+  border-radius: 0.25rem;
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin: 0.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card.primary {
+  border-top: 4px solid var(--primary-color);
+}
+
+.stat-card.success {
+  border-top: 4px solid var(--success-color);
+}
+
+.stat-card.info {
+  border-top: 4px solid var(--info-color);
+}
+
+.stat-card.warning {
+  border-top: 4px solid var(--warning-color);
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-icon {
+  float: right;
+  font-size: 2.5rem;
+  opacity: 0.2;
+}
+
+.dashboard-sections {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+
+.dashboard-section {
+  flex: 1;
+  min-width: 300px;
+  margin: 0.5rem;
+}
+
+.section-card {
+  background-color: white;
+  border-radius: 0.25rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+  height: 100%;
+}
+
+.section-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--primary-color);
+}
+
+.section-body {
+  padding: 1.5rem;
+}
+
+.section-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+  background-color: #f8f9fa;
+  text-align: center;
+}
+
+/* Recent Activities */
+.activity-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.activity-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-content {
+  display: flex;
+  align-items: flex-start;
+}
+
+.activity-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 140, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.activity-icon i {
+  color: var(--primary-color);
+}
+
+.activity-details {
+  flex: 1;
+}
+
+.activity-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.activity-time {
+  color: var(--text-light);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Quick Links */
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.quick-link {
+  text-align: center;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  background-color: #f8f9fa;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+.quick-link:hover {
+  background-color: var(--primary-light);
+  color: white;
+  transform: translateY(-5px);
+  text-decoration: none;
+}
+
+.quick-link-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.quick-link:hover .quick-link-icon {
+  color: white;
+}
+
+.quick-link-label {
+  font-size: 0.9rem;
+}
+
+/* Recent Payslips */
+.recent-payslips {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.payslip-item {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.payslip-item:last-child {
+  border-bottom: none;
+}
+
+.payslip-info {
+  flex: 1;
+}
+
+.payslip-employee {
+  font-weight: 500;
+  margin: 0;
+}
+
+.payslip-details {
+  color: var(--text-light);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.payslip-amount {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-stats {
+    flex-direction: column;
+  }
+  
+  .stat-card {
+    min-width: 100%;
+  }
+  
+  .dashboard-sections {
+    flex-direction: column;
+  }
+  
+  .dashboard-section {
+    min-width: 100%;
+  }
+}

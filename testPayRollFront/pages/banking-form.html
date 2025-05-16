@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banking Detail Form - Pay Slip Generator</title>
+  
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../assets/img/favicon.ico" type="image/x-icon">
+  
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="stylesheet" href="../assets/css/forms.css">
+</head>
+<body>
+  <!-- Sidebar Container -->
+  <div id="sidebar-container"></div>
+  
+  <div class="main-content">
+    <!-- Header Container -->
+    <div id="header-container"></div>
+    
+    <!-- Banking Form Content -->
+    <div class="container">
+      <div class="form-container">
+        <h1 id="banking-form-title" class="form-title">Add Banking Detail</h1>
+        
+        <form id="banking-form">
+          <!-- Employee Selection -->
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="employee_id">Employee ID</label>
+                <select class="form-control" id="employee_id" name="employee_id" required>
+                  <option value="">Select Employee</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="employee_name">Employee Name</label>
+                <input type="text" class="form-control autofill-field" id="employee_name" name="employee_name" readonly>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Banking Details -->
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="preferred_bank">Preferred Bank</label>
+                <input type="text" class="form-control" id="preferred_bank" name="preferred_bank" required>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="bank_account_number">Bank Account Number</label>
+                <input type="text" class="form-control" id="bank_account_number" name="bank_account_number" required>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="bank_account_name">Bank Account Holder Name</label>
+                <input type="text" class="form-control" id="bank_account_name" name="bank_account_name" required>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Form Buttons -->
+          <div class="form-actions">
+            <button type="button" id="cancel-btn" class="btn btn-secondary">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Banking Detail</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+  </div>
+  
+  <!-- Modal Container -->
+  <div id="modal-container"></div>
+  
+  <!-- JavaScript Files -->
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/banking.js"></script>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

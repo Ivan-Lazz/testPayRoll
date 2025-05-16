@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payslips - Pay Slip Generator</title>
+  
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../assets/img/favicon.ico" type="image/x-icon">
+  
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="stylesheet" href="../assets/css/tables.css">
+</head>
+<body>
+  <!-- Sidebar Container -->
+  <div id="sidebar-container"></div>
+  
+  <div class="main-content">
+    <!-- Header Container -->
+    <div id="header-container"></div>
+    
+    <!-- Payslip List Content -->
+    <div class="container">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h1>Payslips</h1>
+          <button id="add-payslip-btn" class="btn btn-primary">
+            <i class="fas fa-plus-circle mr-2"></i> Generate New Payslip
+          </button>
+        </div>
+        
+        <div class="card-body">
+          <!-- Search and Filters -->
+          <div class="table-toolbar">
+            <form id="payslip-search-form" class="table-search">
+              <input type="text" id="payslip-search-input" placeholder="Search payslips..." aria-label="Search">
+              <button type="submit">
+                <i class="fas fa-search"></i>
+              </button>
+            </form>
+            
+            <div class="table-filters">
+              <select id="status-filter" class="form-control">
+                <option value="">All Statuses</option>
+                <option value="Paid">Paid</option>
+                <option value="Pending">Pending</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+              
+              <div class="date-range">
+                <input type="date" id="start-date-filter" class="form-control" placeholder="Start Date">
+                <span class="date-separator">to</span>
+                <input type="date" id="end-date-filter" class="form-control" placeholder="End Date">
+              </div>
+            </div>
+            
+            <button id="reset-filters-btn" class="btn btn-secondary btn-sm">
+              <i class="fas fa-sync-alt mr-2"></i> Reset
+            </button>
+          </div>
+          
+          <!-- Payslips Table -->
+          <div class="table-container">
+            <table id="payslips-table" class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Payslip No</th>
+                  <th>Employee</th>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>PDFs</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="payslips-table-body">
+                <tr>
+                  <td colspan="7" class="text-center">Loading...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Pagination -->
+          <div id="pagination" class="pagination">
+            <div class="pagination-info">
+              Showing <span id="pagination-start">1</span> to <span id="pagination-end">10</span> of <span id="pagination-total">100</span> entries
+            </div>
+            
+            <div class="pagination-controls">
+              <button id="pagination-first" class="pagination-btn" title="First Page">
+                <i class="fas fa-angle-double-left"></i>
+              </button>
+              <button id="pagination-prev" class="pagination-btn" title="Previous Page">
+                <i class="fas fa-angle-left"></i>
+              </button>
+              
+              <div id="pagination-pages" class="pagination-pages">
+                <!-- Page buttons will be dynamically inserted here -->
+              </div>
+              
+              <button id="pagination-next" class="pagination-btn" title="Next Page">
+                <i class="fas fa-angle-right"></i>
+              </button>
+              <button id="pagination-last" class="pagination-btn" title="Last Page">
+                <i class="fas fa-angle-double-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+  </div>
+  
+  <!-- Modal Container -->
+  <div id="modal-container"></div>
+  
+  <!-- JavaScript Files -->
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/payslips.js"></script>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payslip Generator - Pay Slip Generator</title>
+  
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../assets/img/favicon.ico" type="image/x-icon">
+  
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="stylesheet" href="../assets/css/forms.css">
+  <link rel="stylesheet" href="../assets/css/payslip.css">
+</head>
+<body>
+  <!-- Sidebar Container -->
+  <div id="sidebar-container"></div>
+  
+  <div class="main-content">
+    <!-- Header Container -->
+    <div id="header-container"></div>
+    
+    <!-- Payslip Form Content -->
+    <div class="container">
+      <div class="payslip-container">
+        <div class="payslip-header">
+          <h1 class="payslip-title">Payslip Generator</h1>
+          <p class="payslip-subtitle">Create a new payslip for an employee</p>
+        </div>
+        
+        <div class="payslip-body">
+          <div class="payslip-form-container">
+            <!-- Payslip Form -->
+            <div class="payslip-form">
+              <form id="payslip-form">
+                <!-- Employee Details -->
+                <div class="form-row">
+                  <div class="form-col form-col-md-6">
+                    <div class="form-group">
+                      <label class="form-label" for="employee_id">Employee</label>
+                      <select class="form-control" id="employee_id" name="employee_id" required>
+                        <option value="">Select Employee</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-col form-col-md-6">
+                    <div class="form-group">
+                      <label class="form-label" for="employee_name">Employee Name</label>
+                      <input type="text" class="form-control autofill-field" id="employee_name" name="employee_name" readonly>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Banking Details -->
+                <div class="form-row">
+                  <div class="form-col form-col-md-6">
+                    <div class="form-group">
+                      <label class="form-label" for="bank_account_id">Bank Account</label>
+                      <select class="form-control" id="bank_account_id" name="bank_account_id" required>
+                        <option value="">Select Bank Account</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-col form-col-md-6">
+                    <div class="form-group">
+                      <label class="form-label" for="bank_details">Bank Details</label>
+                      <input type="text" class="form-control autofill-field" id="bank_details" name="bank_details" readonly>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Payment Details -->
+                <div class="form-row">
+                  <div class="form-col form-col-md-6">
+                    <div class="form-group">
+                      <label class="form-label" for="person_in_charge">Person In Charge</label>
+                      <input type="text" class="form-control" id="person_in_charge" name="person_in_charge" required>
+                    </div>
+                  </div>
+                  <div class="form-col form-col-md-6">
+                    <div class="form-group">
+                      <label class="form-label" for="payment_status">Payment Status</label>
+                      <select class="form-control" id="payment_status" name="payment_status" required>
+                        <option value="Pending" selected>Pending</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Cancelled">Cancelled</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Dates -->
+                <div class="form-row">
+                  <div class="form-col form-col-md-6">
+                    <div class="form-group">
+                      <label class="form-label" for="cutoff_date">Cutoff Date</label>
+                      <input type="date" class="form-control" id="cutoff_date" name="cutoff_date" required>
+                    </div>
+                  </div>
+                  <div class="form-col form-col-md-6">
+                    <div class="form-group">
+                      <label class="form-label" for="payment_date">Payment Date</label>
+                      <input type="date" class="form-control" id="payment_date" name="payment_date" required>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Amount -->
+                <div class="form-row">
+                  <div class="form-col form-col-md-4">
+                    <div class="form-group">
+                      <label class="form-label" for="salary">Salary Amount</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">₱</div>
+                        </div>
+                        <input type="number" class="form-control" id="salary" name="salary" step="0.01" min="0" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-col form-col-md-4">
+                    <div class="form-group">
+                      <label class="form-label" for="bonus">Bonus Amount</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">₱</div>
+                        </div>
+                        <input type="number" class="form-control" id="bonus" name="bonus" step="0.01" min="0" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-col form-col-md-4">
+                    <div class="form-group">
+                      <label class="form-label" for="total_salary">Total Amount</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">₱</div>
+                        </div>
+                        <input type="number" class="form-control autofill-field" id="total_salary" name="total_salary" step="0.01" min="0" readonly>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Form Buttons -->
+                <div class="form-actions">
+                  <button type="button" id="cancel-btn" class="btn btn-secondary">Cancel</button>
+                  <button type="submit" class="btn btn-primary">Generate Payslip</button>
+                </div>
+              </form>
+              
+              <!-- PDF Links (shown after generation) -->
+              <div id="pdf-links" class="pdf-links mt-4" style="display: none;"></div>
+            </div>
+            
+            <!-- Payslip Preview -->
+            <div class="payslip-preview-container">
+              <div class="variant-toggle">
+                <button id="agent-preview-btn" class="variant-btn active">Agent View</button>
+                <button id="admin-preview-btn" class="variant-btn">Admin View</button>
+              </div>
+              
+              <div id="payslip-preview" class="preview-container">
+                <!-- Preview content will be dynamically generated -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+  </div>
+  
+  <!-- Modal Container -->
+  <div id="modal-container"></div>
+  
+  <!-- JavaScript Files -->
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/payslip.js"></script>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

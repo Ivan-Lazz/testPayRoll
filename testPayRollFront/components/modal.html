@@ -1,0 +1,407 @@
+<!-- modal.html - Modal dialog component -->
+<div id="modal" class="modal">
+  <div class="modal-overlay"></div>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2 id="modal-title" class="modal-title">Modal Title</h2>
+      <button id="modal-close" class="modal-close">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="modal-body" class="modal-body">
+      <!-- Modal content goes here -->
+    </div>
+    <div id="modal-footer" class="modal-footer">
+      <button id="modal-cancel" class="btn btn-secondary">Cancel</button>
+      <button id="modal-confirm" class="btn btn-primary">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+  }
+  
+  .modal.active {
+    display: block;
+  }
+  
+  .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal-container {
+    position: relative;
+    width: 90%;
+    max-width: 500px;
+    margin: 2rem auto;
+    background-color: white;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: modal-fade-in 0.3s ease;
+  }
+  
+  @keyframes modal-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .modal-title {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--primary-color);
+  }
+  
+  .modal-close {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: color 0.3s ease;
+  }
+  
+  .modal-close:hover {
+    color: var(--danger-color);
+  }
+  
+  .modal-body {
+    padding: 1.5rem;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-color);
+    gap: 0.5rem;
+  }
+  
+  /* Modal variations */
+  .modal-sm .modal-container {
+    max-width: 300px;
+  }
+  
+  .modal-lg .modal-container {
+    max-width: 800px;
+  }
+  
+  /* Confirmation modal */
+  .modal-confirm .modal-body {
+    text-align: center;
+    padding: 2rem 1.5rem;
+  }
+  
+  .modal-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .modal-icon.warning {
+    color: var(--warning-color);
+  }
+  
+  .modal-icon.danger {
+    color: var(--danger-color);
+  }
+  
+  .modal-icon.success {
+    color: var(--success-color);
+  }
+  
+  .modal-text {
+    margin-bottom: 1rem;
+  }
+  
+  /* Form in modal */
+  .modal-form .form-group:last-child {
+    margin-bottom: 0;
+  }
+  
+  @media (max-width: 576px) {
+    .modal-container {
+      width: 95%;
+      margin: 1rem auto;
+    }
+    
+    .modal-footer {
+      flex-direction: column;
+    }
+    
+    .modal-footer .btn {
+      width: 100%;
+      margin-left: 0;
+      margin-top: 0.5rem;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Modal utility functions
+   * Usage:
+   * 
+   * // Basic modal
+   * Modal.open({
+   *   title: 'Modal Title',
+   *   content: 'Modal content goes here',
+   *   onConfirm: function() {
+   *     console.log('Confirmed');
+   *     Modal.close();
+   *   }
+   * });
+   * 
+   * // Confirmation modal
+   * Modal.confirm({
+   *   title: 'Delete Item',
+   *   message: 'Are you sure you want to delete this item?',
+   *   icon: 'warning',
+   *   confirmText: 'Delete',
+   *   confirmClass: 'btn-danger',
+   *   onConfirm: function() {
+   *     console.log('Delete confirmed');
+   *     Modal.close();
+   *   }
+   * });
+   * 
+   * // Form modal
+   * Modal.form({
+   *   title: 'Add Item',
+   *   form: `
+   *     <div class="form-group">
+   *       <label class="form-label">Name</label>
+   *       <input type="text" class="form-control" id="item-name">
+   *     </div>
+   *   `,
+   *   onConfirm: function() {
+   *     const name = document.getElementById('item-name').value;
+   *     console.log('Form submitted', name);
+   *     Modal.close();
+   *   }
+   * });
+   */
+  
+  const Modal = {
+    modal: null,
+    modalTitle: null,
+    modalBody: null,
+    modalFooter: null,
+    modalConfirm: null,
+    modalCancel: null,
+    modalClose: null,
+    onConfirm: null,
+    onCancel: null,
+    
+    init: function() {
+      this.modal = document.getElementById('modal');
+      this.modalTitle = document.getElementById('modal-title');
+      this.modalBody = document.getElementById('modal-body');
+      this.modalFooter = document.getElementById('modal-footer');
+      this.modalConfirm = document.getElementById('modal-confirm');
+      this.modalCancel = document.getElementById('modal-cancel');
+      this.modalClose = document.getElementById('modal-close');
+      
+      // Attach event listeners
+      this.modalConfirm.addEventListener('click', () => {
+        if (this.onConfirm) this.onConfirm();
+      });
+      
+      this.modalCancel.addEventListener('click', () => {
+        if (this.onCancel) this.onCancel();
+        this.close();
+      });
+      
+      this.modalClose.addEventListener('click', () => {
+        this.close();
+      });
+      
+      // Close modal when clicking on overlay
+      this.modal.querySelector('.modal-overlay').addEventListener('click', () => {
+        this.close();
+      });
+      
+      // Close modal on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.modal.classList.contains('active')) {
+          this.close();
+        }
+      });
+    },
+    
+    open: function(options) {
+      const defaults = {
+        title: 'Modal',
+        content: '',
+        confirmText: 'Confirm',
+        cancelText: 'Cancel',
+        confirmClass: 'btn-primary',
+        cancelClass: 'btn-secondary',
+        showFooter: true,
+        size: '', // '', 'sm', 'lg'
+        onConfirm: null,
+        onCancel: null
+      };
+      
+      const settings = {...defaults, ...options};
+      
+      this.modalTitle.textContent = settings.title;
+      this.modalBody.innerHTML = settings.content;
+      
+      this.modalConfirm.textContent = settings.confirmText;
+      this.modalCancel.textContent = settings.cancelText;
+      
+      // Reset classes
+      this.modalConfirm.className = 'btn ' + settings.confirmClass;
+      this.modalCancel.className = 'btn ' + settings.cancelClass;
+      
+      // Show/hide footer
+      this.modalFooter.style.display = settings.showFooter ? 'flex' : 'none';
+      
+      // Set modal size
+      this.modal.className = 'modal';
+      if (settings.size) {
+        this.modal.classList.add('modal-' + settings.size);
+      }
+      
+      // Set callbacks
+      this.onConfirm = settings.onConfirm;
+      this.onCancel = settings.onCancel;
+      
+      // Show modal
+      this.modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    },
+    
+    confirm: function(options) {
+      const defaults = {
+        title: 'Confirm',
+        message: 'Are you sure?',
+        icon: 'warning', // warning, danger, success
+        confirmText: 'Confirm',
+        cancelText: 'Cancel',
+        confirmClass: 'btn-primary',
+        cancelClass: 'btn-secondary',
+        onConfirm: null,
+        onCancel: null
+      };
+      
+      const settings = {...defaults, ...options};
+      
+      let iconClass = '';
+      switch (settings.icon) {
+        case 'warning':
+          iconClass = 'fas fa-exclamation-triangle';
+          break;
+        case 'danger':
+          iconClass = 'fas fa-times-circle';
+          break;
+        case 'success':
+          iconClass = 'fas fa-check-circle';
+          break;
+        default:
+          iconClass = 'fas fa-question-circle';
+      }
+      
+      const content = `
+        <div class="modal-confirm">
+          <div class="modal-icon ${settings.icon}">
+            <i class="${iconClass}"></i>
+          </div>
+          <div class="modal-text">
+            ${settings.message}
+          </div>
+        </div>
+      `;
+      
+      this.open({
+        title: settings.title,
+        content: content,
+        confirmText: settings.confirmText,
+        cancelText: settings.cancelText,
+        confirmClass: settings.confirmClass,
+        cancelClass: settings.cancelClass,
+        onConfirm: settings.onConfirm,
+        onCancel: settings.onCancel,
+        size: 'sm'
+      });
+      
+      this.modal.classList.add('modal-confirm');
+    },
+    
+    form: function(options) {
+      const defaults = {
+        title: 'Form',
+        form: '',
+        confirmText: 'Submit',
+        cancelText: 'Cancel',
+        confirmClass: 'btn-primary',
+        cancelClass: 'btn-secondary',
+        onConfirm: null,
+        onCancel: null
+      };
+      
+      const settings = {...defaults, ...options};
+      
+      const content = `
+        <div class="modal-form">
+          ${settings.form}
+        </div>
+      `;
+      
+      this.open({
+        title: settings.title,
+        content: content,
+        confirmText: settings.confirmText,
+        cancelText: settings.cancelText,
+        confirmClass: settings.confirmClass,
+        cancelClass: settings.cancelClass,
+        onConfirm: settings.onConfirm,
+        onCancel: settings.onCancel
+      });
+      
+      this.modal.classList.add('modal-form');
+    },
+    
+    close: function() {
+      this.modal.classList.remove('active');
+      document.body.style.overflow = '';
+      
+      // Clear callbacks
+      this.onConfirm = null;
+      this.onCancel = null;
+    }
+  };
+  
+  // Initialize modal
+  document.addEventListener('DOMContentLoaded', function() {
+    Modal.init();
+  });
+</script>

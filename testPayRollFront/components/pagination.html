@@ -1,0 +1,325 @@
+<!-- pagination.html - Pagination component -->
+<div class="pagination">
+  <div class="pagination-info">
+    Showing <span id="pagination-start">1</span> to <span id="pagination-end">10</span> of <span id="pagination-total">100</span> entries
+  </div>
+  
+  <div class="pagination-controls">
+    <button id="pagination-first" class="pagination-btn" title="First Page">
+      <i class="fas fa-angle-double-left"></i>
+    </button>
+    <button id="pagination-prev" class="pagination-btn" title="Previous Page">
+      <i class="fas fa-angle-left"></i>
+    </button>
+    
+    <div id="pagination-pages" class="pagination-pages">
+      <!-- Page buttons will be dynamically inserted here -->
+    </div>
+    
+    <button id="pagination-next" class="pagination-btn" title="Next Page">
+      <i class="fas fa-angle-right"></i>
+    </button>
+    <button id="pagination-last" class="pagination-btn" title="Last Page">
+      <i class="fas fa-angle-double-right"></i>
+    </button>
+  </div>
+</div>
+
+<style>
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .pagination-info {
+    color: var(--text-light);
+    font-size: 0.875rem;
+    margin-right: 1rem;
+  }
+  
+  .pagination-controls {
+    display: flex;
+    align-items: center;
+  }
+  
+  .pagination-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .pagination-btn:hover:not(:disabled) {
+    background-color: var(--primary-light);
+    color: white;
+    border-color: var(--primary-light);
+  }
+  
+  .pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .pagination-btn:first-child {
+    border-radius: 0.25rem 0 0 0.25rem;
+  }
+  
+  .pagination-btn:last-child {
+    border-radius: 0 0.25rem 0.25rem 0;
+  }
+  
+  .pagination-pages {
+    display: flex;
+  }
+  
+  .pagination-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-left: none;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .pagination-page:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .pagination-page.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    cursor: default;
+  }
+  
+  @media (max-width: 576px) {
+    .pagination {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .pagination-info {
+      margin-right: 0;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Pagination utility
+   * 
+   * Usage:
+   * 
+   * const paginationInstance = Pagination.init({
+   *   totalItems: 100,
+   *   itemsPerPage: 10,
+   *   currentPage: 1,
+   *   maxPageButtons: 5,
+   *   onPageChange: function(page) {
+   *     console.log('Page changed to', page);
+   *     // Fetch data for the new page
+   *     fetchData(page);
+   *   }
+   * });
+   * 
+   * // To update pagination with new data
+   * paginationInstance.update({
+   *   totalItems: 200,
+   *   currentPage: 3
+   * });
+   */
+  
+  const Pagination = {
+    elem: null,
+    startElem: null,
+    endElem: null,
+    totalElem: null,
+    pagesElem: null,
+    firstBtn: null,
+    prevBtn: null,
+    nextBtn: null,
+    lastBtn: null,
+    
+    options: {
+      totalItems: 0,
+      itemsPerPage: 10,
+      currentPage: 1,
+      maxPageButtons: 5,
+      onPageChange: null
+    },
+    
+    init: function(options) {
+      // Find elements
+      this.elem = document.querySelector('.pagination');
+      this.startElem = document.getElementById('pagination-start');
+      this.endElem = document.getElementById('pagination-end');
+      this.totalElem = document.getElementById('pagination-total');
+      this.pagesElem = document.getElementById('pagination-pages');
+      this.firstBtn = document.getElementById('pagination-first');
+      this.prevBtn = document.getElementById('pagination-prev');
+      this.nextBtn = document.getElementById('pagination-next');
+      this.lastBtn = document.getElementById('pagination-last');
+      
+      // Set options
+      this.options = {...this.options, ...options};
+      
+      // Attach event listeners
+      this.firstBtn.addEventListener('click', () => {
+        if (this.options.currentPage > 1) {
+          this.goToPage(1);
+        }
+      });
+      
+      this.prevBtn.addEventListener('click', () => {
+        if (this.options.currentPage > 1) {
+          this.goToPage(this.options.currentPage - 1);
+        }
+      });
+      
+      this.nextBtn.addEventListener('click', () => {
+        if (this.options.currentPage < this.getTotalPages()) {
+          this.goToPage(this.options.currentPage + 1);
+        }
+      });
+      
+      this.lastBtn.addEventListener('click', () => {
+        if (this.options.currentPage < this.getTotalPages()) {
+          this.goToPage(this.getTotalPages());
+        }
+      });
+      
+      // Render pagination
+      this.render();
+      
+      return this;
+    },
+    
+    update: function(options) {
+      this.options = {...this.options, ...options};
+      this.render();
+      return this;
+    },
+    
+    goToPage: function(page) {
+      if (page < 1 || page > this.getTotalPages() || page === this.options.currentPage) {
+        return;
+      }
+      
+      this.options.currentPage = page;
+      this.render();
+      
+      if (this.options.onPageChange) {
+        this.options.onPageChange(page);
+      }
+    },
+    
+    getTotalPages: function() {
+      return Math.ceil(this.options.totalItems / this.options.itemsPerPage);
+    },
+    
+    getPageStart: function() {
+      return ((this.options.currentPage - 1) * this.options.itemsPerPage) + 1;
+    },
+    
+    getPageEnd: function() {
+      const end = this.options.currentPage * this.options.itemsPerPage;
+      return end > this.options.totalItems ? this.options.totalItems : end;
+    },
+    
+    render: function() {
+      // Update info text
+      this.startElem.textContent = this.getPageStart();
+      this.endElem.textContent = this.getPageEnd();
+      this.totalElem.textContent = this.options.totalItems;
+      
+      // Disable/enable navigation buttons
+      this.firstBtn.disabled = this.options.currentPage === 1;
+      this.prevBtn.disabled = this.options.currentPage === 1;
+      this.nextBtn.disabled = this.options.currentPage === this.getTotalPages();
+      this.lastBtn.disabled = this.options.currentPage === this.getTotalPages();
+      
+      // Generate page buttons
+      this.renderPageButtons();
+    },
+    
+    renderPageButtons: function() {
+      const totalPages = this.getTotalPages();
+      const currentPage = this.options.currentPage;
+      const maxButtons = this.options.maxPageButtons;
+      
+      // Clear current buttons
+      this.pagesElem.innerHTML = '';
+      
+      if (totalPages <= 1) {
+        return;
+      }
+      
+      let startPage = 1;
+      let endPage = totalPages;
+      
+      if (totalPages > maxButtons) {
+        // Calculate start and end page
+        const halfButtons = Math.floor(maxButtons / 2);
+        
+        if (currentPage <= halfButtons) {
+          // Near the start
+          endPage = maxButtons;
+        } else if (currentPage + halfButtons >= totalPages) {
+          // Near the end
+          startPage = totalPages - maxButtons + 1;
+        } else {
+          // Middle
+          startPage = currentPage - halfButtons;
+          endPage = currentPage + halfButtons;
+        }
+      }
+      
+      // Add page buttons
+      for (let i = startPage; i <= endPage; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = 'pagination-page';
+        pageBtn.textContent = i;
+        
+        if (i === currentPage) {
+          pageBtn.classList.add('active');
+        } else {
+          pageBtn.addEventListener('click', () => {
+            this.goToPage(i);
+          });
+        }
+        
+        this.pagesElem.appendChild(pageBtn);
+      }
+    }
+  };
+  
+  // Initialize pagination on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    // This is just an example initialization
+    // In real use, this would be initialized when data is loaded
+    /*
+    Pagination.init({
+      totalItems: 100,
+      itemsPerPage: 10,
+      currentPage: 1,
+      onPageChange: function(page) {
+        console.log('Page changed to', page);
+        // Fetch data for the new page
+      }
+    });
+    */
+  });
+</script>

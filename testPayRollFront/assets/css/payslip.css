@@ -1,0 +1,264 @@
+/* payslip.css - Payslip generation specific styles */
+
+.payslip-container {
+  background-color: white;
+  border-radius: 0.25rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+}
+
+.payslip-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.payslip-title {
+  margin: 0;
+  color: var(--primary-color);
+}
+
+.payslip-subtitle {
+  color: var(--text-light);
+  font-weight: normal;
+  margin-top: 0.5rem;
+}
+
+.payslip-body {
+  padding: 1.5rem;
+}
+
+.payslip-preview {
+  border: 1px solid var(--border-color);
+  border-radius: 0.25rem;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.preview-header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1.5rem;
+  text-align: center;
+  position: relative;
+}
+
+.company-logo {
+  max-width: 80px;
+  margin-bottom: 1rem;
+}
+
+.company-name {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.preview-header-type {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: white;
+  color: var(--primary-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.preview-body {
+  padding: 1.5rem;
+}
+
+.preview-section {
+  margin-bottom: 1.5rem;
+}
+
+.preview-section:last-child {
+  margin-bottom: 0;
+}
+
+.preview-section-title {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.preview-row {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.preview-label {
+  font-weight: 500;
+  width: 40%;
+}
+
+.preview-value {
+  width: 60%;
+}
+
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.preview-table th,
+.preview-table td {
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.preview-table th {
+  background-color: #f8f9fa;
+  font-weight: 500;
+  text-align: left;
+}
+
+.preview-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.preview-total-row {
+  font-weight: bold;
+}
+
+.preview-total-label {
+  text-align: right;
+}
+
+.preview-footer {
+  border-top: 1px solid var(--border-color);
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.875rem;
+}
+
+.payslip-actions {
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+/* Preview Variant Toggle */
+.variant-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.variant-btn {
+  padding: 0.5rem 1rem;
+  background-color: #f8f9fa;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.variant-btn:first-child {
+  border-radius: 0.25rem 0 0 0.25rem;
+}
+
+.variant-btn:last-child {
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.variant-btn.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+/* PDF Links */
+.pdf-links {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 0.25rem;
+  border: 1px solid var(--border-color);
+}
+
+.pdf-title {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.pdf-link {
+  display: block;
+  padding: 0.75rem;
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+  text-decoration: none;
+  color: var(--text-color);
+  transition: var(--transition);
+}
+
+.pdf-link:hover {
+  background-color: #f0f0f0;
+  text-decoration: none;
+}
+
+.pdf-link i {
+  color: #e74c3c;
+  margin-right: 0.5rem;
+}
+
+/* Split Form Layout */
+.payslip-form-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.payslip-form {
+  flex: 1;
+  min-width: 300px;
+  padding-right: 1.5rem;
+}
+
+.payslip-preview-container {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* Calculation Fields */
+.calculation-row {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.calculation-field {
+  flex: 1;
+  margin-right: 0.5rem;
+}
+
+.calculation-operator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  font-size: 1.25rem;
+  color: var(--text-light);
+}
+
+.calculation-result {
+  flex: 1;
+  margin-left: 0.5rem;
+}
+
+/* Responsive Layout */
+@media (max-width: 992px) {
+  .payslip-form-container {
+    flex-direction: column;
+  }
+
+  .payslip-form {
+    padding-right: 0;
+    margin-bottom: 1.5rem;
+  }
+}

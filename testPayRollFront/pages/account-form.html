@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Form - Pay Slip Generator</title>
+  
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../assets/img/favicon.ico" type="image/x-icon">
+  
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="stylesheet" href="../assets/css/forms.css">
+</head>
+<body>
+  <!-- Sidebar Container -->
+  <div id="sidebar-container"></div>
+  
+  <div class="main-content">
+    <!-- Header Container -->
+    <div id="header-container"></div>
+    
+    <!-- Account Form Content -->
+    <div class="container">
+      <div class="form-container">
+        <h1 id="account-form-title" class="form-title">Add Employee Account</h1>
+        
+        <form id="account-form">
+          <!-- Employee Selection -->
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="employee_id">Employee ID</label>
+                <select class="form-control" id="employee_id" name="employee_id" required>
+                  <option value="">Select Employee</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Employee Details (Auto-filled) -->
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="firstname">First Name</label>
+                <input type="text" class="form-control autofill-field" id="firstname" name="firstname" readonly>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="lastname">Last Name</label>
+                <input type="text" class="form-control autofill-field" id="lastname" name="lastname" readonly>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Account Details -->
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="account_email">Account Email</label>
+                <input type="email" class="form-control" id="account_email" name="account_email" required>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="account_password">Account Password</label>
+                <input type="password" class="form-control" id="account_password" name="account_password" required>
+                <small class="form-text">Password is required for new accounts only.</small>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="account_type">Account Type</label>
+                <select class="form-control" id="account_type" name="account_type" required>
+                  <option value="">Select Account Type</option>
+                  <option value="Team Leader">Team Leader</option>
+                  <option value="Overflow">Overflow</option>
+                  <option value="Auto-Warranty">Auto-Warranty</option>
+                  <option value="Commissions">Commissions</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="account_status">Account Status</label>
+                <select class="form-control" id="account_status" name="account_status" required>
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="INACTIVE">INACTIVE</option>
+                  <option value="SUSPENDED">SUSPENDED</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Form Buttons -->
+          <div class="form-actions">
+            <button type="button" id="cancel-btn" class="btn btn-secondary">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Account</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+  </div>
+  
+  <!-- Modal Container -->
+  <div id="modal-container"></div>
+  
+  <!-- JavaScript Files -->
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/accounts.js"></script>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

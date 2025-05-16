@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Form - Pay Slip Generator</title>
+  
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../assets/img/favicon.ico" type="image/x-icon">
+  
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="stylesheet" href="../assets/css/forms.css">
+</head>
+<body>
+  <!-- Sidebar Container -->
+  <div id="sidebar-container"></div>
+  
+  <div class="main-content">
+    <!-- Header Container -->
+    <div id="header-container"></div>
+    
+    <!-- User Form Content -->
+    <div class="container">
+      <div class="form-container">
+        <h1 id="user-form-title" class="form-title">Add User</h1>
+        
+        <form id="user-form">
+          <!-- User Details -->
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="firstname">First Name</label>
+                <input type="text" class="form-control" id="firstname" name="firstname" required>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="lastname">Last Name</label>
+                <input type="text" class="form-control" id="lastname" name="lastname" required>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="email">Email Address</label>
+                <input type="email" class="form-control" id="email" name="email">
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+                <small class="form-text">Password must be at least 6 characters long.</small>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="role">Role</label>
+                <select class="form-control" id="role" name="role" required>
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="status">Status</label>
+                <select class="form-control" id="status" name="status" required>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Form Buttons -->
+          <div class="form-actions">
+            <button type="button" id="cancel-btn" class="btn btn-secondary">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save User</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+  </div>
+  
+  <!-- Modal Container -->
+  <div id="modal-container"></div>
+  
+  <!-- JavaScript Files -->
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/users.js"></script>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Pay Slip Generator</title>
+  
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../assets/img/favicon.ico" type="image/x-icon">
+  
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="stylesheet" href="../assets/css/dashboard.css">
+</head>
+<body>
+  <!-- Sidebar Container -->
+  <div id="sidebar-container"></div>
+  
+  <div class="main-content">
+    <!-- Header Container -->
+    <div id="header-container"></div>
+    
+    <!-- Dashboard Content -->
+    <div class="container">
+      <div class="dashboard-header">
+        <h1 class="dashboard-title">Dashboard</h1>
+        <p class="dashboard-subtitle">Welcome to the Pay Slip Generator System</p>
+      </div>
+      
+      <!-- Stats Cards -->
+      <div class="dashboard-stats">
+        <div class="stat-card primary">
+          <div class="stat-icon">
+            <i class="fas fa-user-tie"></i>
+          </div>
+          <div class="stat-value" id="employee-count">0</div>
+          <div class="stat-label">Employees</div>
+        </div>
+        
+        <div class="stat-card success">
+          <div class="stat-icon">
+            <i class="fas fa-file-invoice-dollar"></i>
+          </div>
+          <div class="stat-value" id="payslip-count">0</div>
+          <div class="stat-label">Payslips</div>
+        </div>
+        
+        <div class="stat-card info">
+          <div class="stat-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-value" id="user-count">0</div>
+          <div class="stat-label">Users</div>
+        </div>
+        
+        <div class="stat-card warning">
+          <div class="stat-icon">
+            <i class="fas fa-university"></i>
+          </div>
+          <div class="stat-value">4</div>
+          <div class="stat-label">Banking Types</div>
+        </div>
+      </div>
+      
+      <!-- Dashboard Sections -->
+      <div class="dashboard-sections">
+        <div class="dashboard-section">
+          <div class="section-card">
+            <div class="section-header">
+              <h3 class="section-title">Recent Payslips</h3>
+              <a href="payslips.html" class="btn btn-primary btn-sm">View All</a>
+            </div>
+            <div class="section-body" id="recent-payslips">
+              <p class="text-center">Loading recent payslips...</p>
+            </div>
+            <div class="section-footer">
+              <a href="payslip-form.html" class="btn btn-primary">Generate New Payslip</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="dashboard-section">
+          <div class="section-card">
+            <div class="section-header">
+              <h3 class="section-title">Quick Links</h3>
+            </div>
+            <div class="section-body">
+              <div class="quick-links">
+                <a href="employees.html" class="quick-link">
+                  <div class="quick-link-icon">
+                    <i class="fas fa-user-tie"></i>
+                  </div>
+                  <div class="quick-link-label">Employees</div>
+                </a>
+                
+                <a href="accounts.html" class="quick-link">
+                  <div class="quick-link-icon">
+                    <i class="fas fa-user-tag"></i>
+                  </div>
+                  <div class="quick-link-label">Accounts</div>
+                </a>
+                
+                <a href="banking.html" class="quick-link">
+                  <div class="quick-link-icon">
+                    <i class="fas fa-university"></i>
+                  </div>
+                  <div class="quick-link-label">Banking</div>
+                </a>
+                
+                <a href="payslips.html" class="quick-link">
+                  <div class="quick-link-icon">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                  </div>
+                  <div class="quick-link-label">Payslips</div>
+                </a>
+                
+                <a href="users.html" class="quick-link">
+                  <div class="quick-link-icon">
+                    <i class="fas fa-users"></i>
+                  </div>
+                  <div class="quick-link-label">Users</div>
+                </a>
+                
+                <a href="payslip-form.html" class="quick-link">
+                  <div class="quick-link-icon">
+                    <i class="fas fa-plus-circle"></i>
+                  </div>
+                  <div class="quick-link-label">New Payslip</div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Recent Activity Section -->
+      <div class="section-card mt-4">
+        <div class="section-header">
+          <h3 class="section-title">System Information</h3>
+        </div>
+        <div class="section-body">
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-content">
+                <div class="activity-icon">
+                  <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="activity-details">
+                  <h4 class="activity-title">Initial Admin Account</h4>
+                  <p>Username: admin</p>
+                  <p>Password: Admin@123</p>
+                  <div class="activity-time text-danger">Please change this password after first login</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="activity-item">
+              <div class="activity-content">
+                <div class="activity-icon">
+                  <i class="fas fa-server"></i>
+                </div>
+                <div class="activity-details">
+                  <h4 class="activity-title">System Version</h4>
+                  <p>Pay Slip Generator v1.0.0</p>
+                  <div class="activity-time">Last updated: May 2025</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="activity-item">
+              <div class="activity-content">
+                <div class="activity-icon">
+                  <i class="fas fa-database"></i>
+                </div>
+                <div class="activity-details">
+                  <h4 class="activity-title">Database Information</h4>
+                  <p>Database: MySQL</p>
+                  <p>Name: bm_payroll</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+  </div>
+  
+  <!-- Modal Container -->
+  <div id="modal-container"></div>
+  
+  <!-- JavaScript Files -->
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

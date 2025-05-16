@@ -1,129 +1,98 @@
 <?php
 // Accounts page
+// Set page script
+$page_script = "accounts.js";
 $page_title = "Employee Accounts";
-include_once '../includes/header.php';
 
 // Check if employee ID is provided
-$employee_id = isset($_GET['employee']) ? $_GET['employee'] : '';
+$employee_id = isset($_GET['employee_id']) ? $_GET['employee_id'] : null;
+
+include_once '../includes/header.php';
 ?>
 
-<div class="accounts">
-    <!-- Create Account Modal -->
-    <div class="modal" id="createAccountModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Add Employee Account</h2>
-                <button class="close-modal" id="closeCreateAccountModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="createAccountForm">
-                    <div class="form-group">
-                        <label for="employee_id">Employee ID</label>
-                        <select id="employee_id" name="employee_id" class="form-control" required <?php echo $employee_id ? 'disabled' : ''; ?>>
-                            <option value="">Select Employee</option>
-                            <!-- Employees will be loaded via JavaScript -->
-                        </select>
-                        <?php if ($employee_id): ?>
-                        <input type="hidden" id="employee_id_hidden" name="employee_id_hidden" value="<?php echo $employee_id; ?>">
-                        <?php endif; ?>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="employee_firstname">First Name</label>
-                                <input type="text" id="employee_firstname" name="employee_firstname" class="form-control" readonly>
-                            </div>
-                        </div>
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="employee_lastname">Last Name</label>
-                                <input type="text" id="employee_lastname" name="employee_lastname" class="form-control" readonly>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="account_email">Account Email</label>
-                        <input type="email" id="account_email" name="account_email" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="account_password">Account Password</label>
-                        <input type="password" id="account_password" name="account_password" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="account_type">Account Type</label>
-                        <select id="account_type" name="account_type" class="form-control" required>
-                            <option value="">Select Account Type</option>
-                            <option value="Team Leader">Team Leader</option>
-                            <option value="Overflow">Overflow</option>
-                            <option value="Auto-Warranty">Auto-Warranty</option>
-                            <option value="Commissions">Commissions</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="account_status">Account Status</label>
-                        <select id="account_status" name="account_status" class="form-control" required>
-                            <option value="ACTIVE">Active</option>
-                            <option value="INACTIVE">Inactive</option>
-                            <option value="SUSPENDED">Suspended</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelCreateAccountBtn">Cancel</button>
-                <button class="btn btn-primary" id="saveAccountBtn">Save Account</button>
-            </div>
+<div class="main-content">
+    <div class="header">
+        <h1><i class="fas fa-id-card"></i> Employee Accounts</h1>
+        <div class="user-info">
+            <span><?php echo $_SESSION['firstname'] . ' ' . $_SESSION['lastname']; ?> (<?php echo $_SESSION['role']; ?>)</span>
+            <a href="../logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </div>
 
-    <!-- Accounts List Card -->
+    <?php if ($employee_id): ?>
+    <div class="card mb-20">
+        <div class="card-header">
+            <h2>Accounts for Employee: <span id="employee-name-display">Loading...</span></h2>
+            <a href="employees.php" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Employees
+            </a>
+        </div>
+    </div>
+    <?php endif; ?>
+
     <div class="card">
         <div class="card-header">
-            <h2>Employee Accounts<?php echo $employee_id ? ' - ' . $employee_id : ''; ?></h2>
-            <button class="btn btn-primary" id="openCreateAccountModalBtn">Add Account</button>
+            <h2><?php echo $employee_id ? 'Employee Accounts' : 'All Accounts'; ?></h2>
+            <button id="openCreateAccountModalBtn" class="btn btn-primary" data-open-modal="createAccountModal">
+                <i class="fas fa-plus"></i> Add New Account
+            </button>
         </div>
         <div class="card-body">
+            <div id="alert-container"></div>
             <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Employee</th>
-                            <th>Email</th>
-                            <th>Type</th>
+                            <th>Account ID</th>
+                            <?php if (!$employee_id): ?>
+                            <th>Employee ID</th>
+                            <th>Employee Name</th>
+                            <?php endif; ?>
+                            <th>Account Email</th>
+                            <th>Account Type</th>
                             <th>Status</th>
                             <th>Created</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="accountsList">
-                        <tr>
-                            <td colspan="7" class="text-center">
-                                <div class="loading">
-                                    <div class="loader"></div>
-                                </div>
-                            </td>
-                        </tr>
+                        <!-- Account list will be populated here via JavaScript -->
                     </tbody>
                 </table>
             </div>
-            <div id="accountsPagination" class="mt-20"></div>
+            <div id="accountsPagination" class="pagination">
+                <!-- Pagination will be added here -->
+            </div>
         </div>
     </div>
 </div>
 
-<script>
-    // Set employee ID if provided
-    const employeeId = '<?php echo $employee_id; ?>';
-</script>
+<!-- Include the account modal templates -->
+<?php include_once '../includes/modals/account-modals.php'; ?>
 
-<?php
-// Set page script
-$page_script = "../assets/js/accounts.js";
-include_once '../includes/footer.php';
-?>
+<?php include_once '../includes/footer.php'; ?>
+
+<!-- Add script to initialize the page and pass employee ID if available -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        initPageModals('accounts');
+        
+        <?php if ($employee_id): ?>
+        // If viewing for a specific employee, load their details and accounts
+        const employeeId = '<?php echo $employee_id; ?>';
+        
+        // Load employee details first
+        apiRequest(`employees/get/${employeeId}`)
+            .then(response => {
+                if (response.status === 'success') {
+                    const employee = response.data;
+                    document.getElementById('employee-name-display').textContent = 
+                        `${employee.firstname} ${employee.lastname} (${employee.employee_id})`;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching employee details:', error);
+            });
+        <?php endif; ?>
+    });
+</script>

@@ -1,27 +1,29 @@
-</div>
-    </div>
+<?php
+/**
+ * Footer Template
+ */
+// Get base URL for script paths
+$baseUrl = getBaseUrl();
+?>
+
+    <!-- Alert Container for JS notifications -->
+    <div id="alert-container" class="alert-container"></div>
 
     <!-- JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="<?php echo $base_url; ?>assets/js/main.js"></script>
-    <?php if (isset($page_script)): ?>
-    <script src="<?php echo $base_url; ?><?php echo $page_script; ?>"></script>
+    <script>
+        // Set global API base URL
+        const API_BASE_URL = '<?php echo $baseUrl; ?>backend/';
+    </script>
+
+    <!-- Load main scripts -->
+    <script src="<?php echo $baseUrl; ?>assets/js/main.js"></script>
+    
+    <?php if(isset($page_script)) : ?>
+    <!-- Load page specific script -->
+    <script src="<?php echo $baseUrl; ?>assets/js/<?php echo $page_script; ?>"></script>
     <?php endif; ?>
     
-    <script>
-    // Set API base URL for JavaScript
-    const API_BASE_URL = '<?php echo $base_url; ?>backend/';
-    
-    // Custom logout handling
-    document.addEventListener('DOMContentLoaded', function() {
-        const logoutBtn = document.getElementById('logout-btn');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', function() {
-                const logoutUrl = this.getAttribute('data-logout-url');
-                window.location.href = logoutUrl;
-            });
-        }
-    });
-    </script>
+    <!-- Load Modal Manager script (new addition) -->
+    <script src="<?php echo $baseUrl; ?>assets/js/modal-manager.js"></script>
 </body>
 </html>

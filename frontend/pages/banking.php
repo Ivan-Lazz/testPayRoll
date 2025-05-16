@@ -1,74 +1,53 @@
 <?php
 // Banking details page
+// Set page script
+$page_script = "banking.js";
 $page_title = "Banking Details";
-include_once '../includes/header.php';
 
 // Check if employee ID is provided
-$employee_id = isset($_GET['employee']) ? $_GET['employee'] : '';
+$employee_id = isset($_GET['employee_id']) ? $_GET['employee_id'] : null;
+
+include_once '../includes/header.php';
 ?>
 
-<div class="banking">
-    <!-- Create Banking Details Modal -->
-    <div class="modal" id="createBankingModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Add Banking Details</h2>
-                <button class="close-modal" id="closeCreateBankingModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="createBankingForm">
-                    <div class="form-group">
-                        <label for="employee_id">Employee ID</label>
-                        <select id="employee_id" name="employee_id" class="form-control" required <?php echo $employee_id ? 'disabled' : ''; ?>>
-                            <option value="">Select Employee</option>
-                            <!-- Employees will be loaded via JavaScript -->
-                        </select>
-                        <?php if ($employee_id): ?>
-                        <input type="hidden" id="employee_id_hidden" name="employee_id_hidden" value="<?php echo $employee_id; ?>">
-                        <?php endif; ?>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="employee_name">Employee Name</label>
-                        <input type="text" id="employee_name" name="employee_name" class="form-control" readonly>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="preferred_bank">Preferred Bank</label>
-                        <input type="text" id="preferred_bank" name="preferred_bank" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="bank_account_number">Bank Account Number</label>
-                        <input type="text" id="bank_account_number" name="bank_account_number" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="bank_account_name">Bank Account Name/Holder</label>
-                        <input type="text" id="bank_account_name" name="bank_account_name" class="form-control" required>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelCreateBankingBtn">Cancel</button>
-                <button class="btn btn-primary" id="saveBankingBtn">Save Banking Details</button>
-            </div>
+<div class="main-content">
+    <div class="header">
+        <h1><i class="fas fa-university"></i> Banking Details</h1>
+        <div class="user-info">
+            <span><?php echo $_SESSION['firstname'] . ' ' . $_SESSION['lastname']; ?> (<?php echo $_SESSION['role']; ?>)</span>
+            <a href="../logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </div>
 
-    <!-- Banking List Card -->
+    <?php if ($employee_id): ?>
+    <div class="card mb-20">
+        <div class="card-header">
+            <h2>Banking Details for Employee: <span id="employee-name-display">Loading...</span></h2>
+            <a href="employees.php" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Employees
+            </a>
+        </div>
+    </div>
+    <?php endif; ?>
+
     <div class="card">
         <div class="card-header">
-            <h2>Banking Details<?php echo $employee_id ? ' - ' . $employee_id : ''; ?></h2>
-            <button class="btn btn-primary" id="openCreateBankingModalBtn">Add Banking Details</button>
+            <h2><?php echo $employee_id ? 'Banking Accounts' : 'All Banking Details'; ?></h2>
+            <button id="openCreateBankingModalBtn" class="btn btn-primary" data-open-modal="createBankingModal">
+                <i class="fas fa-plus"></i> Add Banking Details
+            </button>
         </div>
         <div class="card-body">
+            <div id="alert-container"></div>
             <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Employee</th>
+                            <?php if (!$employee_id): ?>
+                            <th>Employee ID</th>
+                            <th>Employee Name</th>
+                            <?php endif; ?>
                             <th>Bank</th>
                             <th>Account Number</th>
                             <th>Account Name</th>
@@ -77,28 +56,43 @@ $employee_id = isset($_GET['employee']) ? $_GET['employee'] : '';
                         </tr>
                     </thead>
                     <tbody id="bankingList">
-                        <tr>
-                            <td colspan="7" class="text-center">
-                                <div class="loading">
-                                    <div class="loader"></div>
-                                </div>
-                            </td>
-                        </tr>
+                        <!-- Banking details will be populated here via JavaScript -->
                     </tbody>
                 </table>
             </div>
-            <div id="bankingPagination" class="mt-20"></div>
+            <div id="bankingPagination" class="pagination">
+                <!-- Pagination will be added here -->
+            </div>
         </div>
     </div>
 </div>
 
-<script>
-    // Set employee ID if provided
-    const employeeId = '<?php echo $employee_id; ?>';
-</script>
+<!-- Include the banking modal templates -->
+<?php include_once '../includes/modals/banking-modals.php'; ?>
 
-<?php
-// Set page script
-$page_script = "../assets/js/banking.js";
-include_once '../includes/footer.php';
-?>
+<?php include_once '../includes/footer.php'; ?>
+
+<!-- Add script to initialize the page and pass employee ID if available -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        initPageModals('banking');
+        
+        <?php if ($employee_id): ?>
+        // If viewing for a specific employee, load their details and banking info
+        const employeeId = '<?php echo $employee_id; ?>';
+        
+        // Load employee details first
+        apiRequest(`employees/get/${employeeId}`)
+            .then(response => {
+                if (response.status === 'success') {
+                    const employee = response.data;
+                    document.getElementById('employee-name-display').textContent = 
+                        `${employee.firstname} ${employee.lastname} (${employee.employee_id})`;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching employee details:', error);
+            });
+        <?php endif; ?>
+    });
+</script>

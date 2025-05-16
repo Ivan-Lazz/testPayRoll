@@ -1,21 +1,10 @@
 /**
- * Users JavaScript
+ * Updated Users JavaScript
+ * This file has been updated to work with the new modal system
  */
 document.addEventListener('DOMContentLoaded', function() {
     // Load users
     loadUsers();
-
-    // Event handlers for the save and update buttons
-    const saveUserBtn = document.getElementById('saveUserBtn');
-    const updateUserBtn = document.getElementById('updateUserBtn');
-    
-    if (saveUserBtn) {
-        saveUserBtn.addEventListener('click', createUser);
-    }
-    
-    if (updateUserBtn) {
-        updateUserBtn.addEventListener('click', updateUser);
-    }
 });
 
 /**
@@ -32,77 +21,81 @@ async function loadUsers(page = 1) {
     
     try {
         const response = await apiRequest('users');
-        
         if (response.status === 'success') {
             const users = response.data;
-            
-            if (users.length === 0) {
-                usersList.innerHTML = '<tr><td colspan="7" class="text-center">No users found</td></tr>';
-                return;
-            }
             
             // Paginate users
             const itemsPerPage = 10;
             const totalPages = Math.ceil(users.length / itemsPerPage);
             
             // Make sure page is valid
-            page = Math.max(1, Math.min(page, totalPages));
+            page = Math.max(1, Math.min(page, totalPages || 1));
             
             const startIndex = (page - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
             const paginatedUsers = users.slice(startIndex, endIndex);
             
-            let usersHTML = '';
+            // Clear the list
+            usersList.innerHTML = '';
             
-            paginatedUsers.forEach(user => {
-                // Determine status class
-                let statusClass = '';
-                switch (user.status) {
-                    case 'active':
+            if (paginatedUsers.length === 0) {
+                usersList.innerHTML = '<tr><td colspan="8" class="text-center">No users found</td></tr>';
+            } else {
+                paginatedUsers.forEach(user => {
+                    // Determine status class
+                    let statusClass = 'text-secondary';
+                    if (user.status === 'active') {
                         statusClass = 'text-success';
-                        break;
-                    case 'inactive':
+                    } else if (user.status === 'inactive') {
                         statusClass = 'text-danger';
-                        break;
-                    default:
-                        statusClass = '';
-                }
-                
-                usersHTML += `
-                    <tr>
-                        <td>${user.id}</td>
-                        <td>${user.firstname} ${user.lastname}</td>
-                        <td>${user.username}</td>
-                        <td>${user.email}</td>
-                        <td>${user.role}</td>
-                        <td class="${statusClass}">${user.status}</td>
-                        <td class="actions">
-                            <button class="btn btn-primary" onclick="editUser(${user.id})">Edit</button>
-                            <button class="btn btn-danger" onclick="deleteUser(${user.id})">Delete</button>
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            usersList.innerHTML = usersHTML;
+                    }
+                    
+                    // Get current user ID to prevent deleting your own account
+                    const currentUserId = getCurrentUserId();
+                    const deleteButton = user.id == currentUserId ? 
+                        `<button class="btn btn-danger btn-sm" disabled title="Cannot delete your own account">
+                            <i class="fas fa-trash"></i>
+                        </button>` : 
+                        `<button class="btn btn-danger btn-sm" onclick="deleteUser(${user.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>`;
+                    
+                    usersList.innerHTML += `
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.firstname} ${user.lastname}</td>
+                            <td>${user.username}</td>
+                            <td>${user.email || '-'}</td>
+                            <td>${user.role}</td>
+                            <td class="${statusClass}">${user.status}</td>
+                            <td>${formatDate(user.created_at)}</td>
+                            <td class="actions">
+                                <button class="btn btn-secondary btn-sm" onclick="editUser(${user.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                ${deleteButton}
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
             
             // Create pagination if needed
-            if (totalPages > 1 && paginationContainer) {
+            if (totalPages > 1) {
                 const paginationEl = createPagination(page, totalPages, function(newPage) {
                     loadUsers(newPage);
                 });
-                
                 paginationContainer.innerHTML = '';
                 paginationContainer.appendChild(paginationEl);
-            } else if (paginationContainer) {
+            } else {
                 paginationContainer.innerHTML = '';
             }
         } else {
-            usersList.innerHTML = '<tr><td colspan="7" class="text-center">No users found</td></tr>';
+            showAlert(response.message, 'danger');
         }
     } catch (error) {
         console.error('Error loading users:', error);
-        usersList.innerHTML = '<tr><td colspan="7" class="text-center">Error loading users. Please try again.</td></tr>';
+        showAlert('Error loading users. Please try again.', 'danger');
     }
 }
 
@@ -119,32 +112,36 @@ async function createUser() {
     const status = document.getElementById('status').value;
     
     // Validate required fields
-    if (!firstname || !lastname || !email || !username || !password || !role || !status) {
+    if (!firstname || !lastname || !username || !password) {
         showAlert('Please fill all required fields.', 'danger');
         return;
     }
     
+    // Validate email format if provided
+    if (email && !isValidEmail(email)) {
+        showAlert('Please enter a valid email address.', 'danger');
+        return;
+    }
+    
+    // Prepare data
+    const data = {
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        username: username,
+        password: password,
+        role: role,
+        status: status
+    };
+    
     try {
-        // Prepare data
-        const data = {
-            firstname,
-            lastname,
-            email,
-            username,
-            password,
-            role,
-            status
-        };
-        
         // Send create request
         const response = await apiRequest('users/create', 'POST', data);
-        
         if (response.status === 'success') {
             showAlert('User created successfully!', 'success');
             
             // Close modal and reset form
-            document.getElementById('createUserModal').classList.remove('show');
-            document.getElementById('createUserForm').reset();
+            modalManager.closeModal('createUserModal');
             
             // Reload users
             loadUsers();
@@ -158,28 +155,15 @@ async function createUser() {
 }
 
 /**
- * Edit user - open edit modal and populate form
+ * Edit user - load user data and open edit modal
  * @param {number} id - User ID
  */
 async function editUser(id) {
     try {
         const response = await apiRequest(`users/get/${id}`);
-        
         if (response.status === 'success') {
-            const user = response.data;
-            
-            // Populate form
-            document.getElementById('edit_id').value = user.id;
-            document.getElementById('edit_firstname').value = user.firstname;
-            document.getElementById('edit_lastname').value = user.lastname;
-            document.getElementById('edit_email').value = user.email;
-            document.getElementById('edit_username').value = user.username;
-            document.getElementById('edit_password').value = ''; // Don't show password
-            document.getElementById('edit_role').value = user.role;
-            document.getElementById('edit_status').value = user.status;
-            
-            // Show modal
-            document.getElementById('editUserModal').classList.add('show');
+            // Open modal with user data
+            modalManager.openModal('editUserModal', response.data);
         } else {
             showAlert('Error loading user details: ' + response.message, 'danger');
         }
@@ -203,35 +187,40 @@ async function updateUser() {
     const status = document.getElementById('edit_status').value;
     
     // Validate required fields
-    if (!id || !firstname || !lastname || !email || !username || !role || !status) {
+    if (!firstname || !lastname || !username) {
         showAlert('Please fill all required fields.', 'danger');
         return;
     }
     
+    // Validate email format if provided
+    if (email && !isValidEmail(email)) {
+        showAlert('Please enter a valid email address.', 'danger');
+        return;
+    }
+    
+    // Prepare data
+    const data = {
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        username: username,
+        role: role,
+        status: status
+    };
+    
+    // Only include password if provided
+    if (password) {
+        data.password = password;
+    }
+    
     try {
-        // Prepare data
-        const data = {
-            firstname,
-            lastname,
-            email,
-            username,
-            role,
-            status
-        };
-        
-        // Only include password if provided
-        if (password) {
-            data.password = password;
-        }
-        
         // Send update request
         const response = await apiRequest(`users/update/${id}`, 'PUT', data);
-        
         if (response.status === 'success') {
             showAlert('User updated successfully!', 'success');
             
             // Close modal
-            document.getElementById('editUserModal').classList.remove('show');
+            modalManager.closeModal('editUserModal');
             
             // Reload users
             loadUsers();
@@ -251,7 +240,7 @@ async function updateUser() {
 async function deleteUser(id) {
     // Prevent deleting your own account
     const currentUserId = getCurrentUserId();
-    if (id === currentUserId) {
+    if (id == currentUserId) {
         showAlert('You cannot delete your own account.', 'danger');
         return;
     }
@@ -262,11 +251,8 @@ async function deleteUser(id) {
     
     try {
         const response = await apiRequest(`users/delete/${id}`, 'DELETE');
-        
         if (response.status === 'success') {
             showAlert('User deleted successfully!', 'success');
-            
-            // Reload users
             loadUsers();
         } else {
             showAlert('Error deleting user: ' + response.message, 'danger');
